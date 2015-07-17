@@ -1,0 +1,7 @@
+{
+	"name": "Adafruit MPL115A2",
+	"author": "Adafruit <info@adafruit.com>",
+	"version": "1.0.0",
+	"license": "BSD",
+	"description": "Driver for the Adafruit MPL115A2 barometric pressure sensor breakout"
+}
