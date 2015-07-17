@@ -20,34 +20,21 @@
          - get both P and T with a single call to getPT
 */
 /**************************************************************************/
-#if ARDUINO >= 100
- #include "Arduino.h"
-#else
- #include "WProgram.h"
-#endif
 
-#include <Wire.h>
 
 #include "Adafruit_MPL115A2.h"
 
 static uint8_t i2cread(void) {
   uint8_t x;
-  #if ARDUINO >= 100
+
   x = Wire.read();
-  #else
-  x = Wire.receive();
-  #endif
   //Serial.print("0x"); Serial.println(x, HEX);
   return x;
 }
 
 
 static void i2cwrite(uint8_t x) {
-  #if ARDUINO >= 100
   Wire.write((uint8_t)x);
-  #else
-  Wire.send(x);
-  #endif
 }
 
 /**************************************************************************/
@@ -71,12 +58,12 @@ void Adafruit_MPL115A2::readCoefficients() {
   b2coeff = (( (uint16_t) i2cread() << 8) | i2cread());
   c12coeff = (( (uint16_t) (i2cread() << 8) | i2cread())) >> 2;
 
-  /*  
+
   Serial.print("A0 = "); Serial.println(a0coeff, HEX);
   Serial.print("B1 = "); Serial.println(b1coeff, HEX);
   Serial.print("B2 = "); Serial.println(b2coeff, HEX);
   Serial.print("C12 = "); Serial.println(c12coeff, HEX);
-  */
+
 
   _mpl115a2_a0 = (float)a0coeff / 8;
   _mpl115a2_b1 = (float)b1coeff / 8192;
@@ -84,12 +71,12 @@ void Adafruit_MPL115A2::readCoefficients() {
   _mpl115a2_c12 = (float)c12coeff;
   _mpl115a2_c12 /= 4194304.0;
 
-  /*
+
   Serial.print("a0 = "); Serial.println(_mpl115a2_a0);
   Serial.print("b1 = "); Serial.println(_mpl115a2_b1);
   Serial.print("b2 = "); Serial.println(_mpl115a2_b2);
   Serial.print("c12 = "); Serial.println(_mpl115a2_c12);
-  */
+
 }
 
 /**************************************************************************/
@@ -146,7 +133,7 @@ float Adafruit_MPL115A2::getTemperature() {
 */
 /**************************************************************************/
 void Adafruit_MPL115A2::getPT(float *P, float *T) {
-  uint16_t 	pressure, temp;
+  uint16_t  pressure, temp;
   float     pressureComp;
 
   // Get raw pressure and temperature settings
@@ -172,7 +159,7 @@ void Adafruit_MPL115A2::getPT(float *P, float *T) {
   // Return pressure and temperature as floating point values
   *P = ((65.0F / 1023.0F) * pressureComp) + 50.0F;        // kPa
   *T = ((float) temp - 498.0F) / -5.35F +25.0F;           // C
-  
+
 }
 
 
